@@ -1,0 +1,42 @@
+﻿<Window x:Class="MordhauTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MordhauTools"
+        xmlns:vms="clr-namespace:MordhauTools.ViewModels"
+        mc:Ignorable="d"
+        Title="Mordhau SteamId Converter" 
+        Width="450"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+
+    <Window.DataContext>
+        <vms:MainViewModel />
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        
+        <Label Grid.Row="0" Grid.Column="0" Content="Input File" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="{Binding IsReady}" Text="{Binding InputFile}" Margin="5" />
+        <Button Grid.Row="0" Grid.Column="2"  IsEnabled="{Binding IsReady}" Command="{Binding BrowseInput}" Content="Browse" Margin="5" />
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Output File" />
+        <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding IsReady}" Text="{Binding OutputFile}" Margin="5" />
+        <Button Grid.Row="1" Grid.Column="2" IsEnabled="{Binding IsReady}" Command="{Binding BrowseOutput}" Content="Browse" Margin="5" />
+
+        <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding IsReady}" Command="{Binding StartConversion}" Content="Start Conversion" Margin="5" />
+    </Grid>
+</Window>
