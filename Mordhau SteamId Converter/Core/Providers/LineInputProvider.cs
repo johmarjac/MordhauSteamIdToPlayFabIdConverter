@@ -8,6 +8,8 @@ namespace MordhauTools.Core.Providers
     {
         public string ProviderName => "Line Input Provider";
 
+        public string Description => "This Provider reads the Input File line by line, each containing a SteamId.";
+
         public Task<string[]> ImportData(string inputFile)
         {
             return File.ReadAllLinesAsync(inputFile);

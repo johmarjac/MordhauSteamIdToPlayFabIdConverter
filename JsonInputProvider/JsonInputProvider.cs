@@ -9,6 +9,8 @@ namespace JsonInputProvider
     {
         public string ProviderName => "Json Input Provider";
 
+        public string Description => "This Provider read the Input File and parses a String Array in Json Format.";
+
         public async Task<string[]> ImportData(string inputFile)
         {
             if (!File.Exists(inputFile))
