@@ -11,6 +11,9 @@ namespace JsonInputProvider
 
         public async Task<string[]> ImportData(string inputFile)
         {
+            if (!File.Exists(inputFile))
+                return null;
+
             return JsonConvert.DeserializeObject<string[]>(await File.ReadAllTextAsync(inputFile));
         }
     }

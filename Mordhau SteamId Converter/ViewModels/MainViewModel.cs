@@ -210,7 +210,15 @@ namespace MordhauTools.ViewModels
             {
                 var convertReqObj = new GetPlayFabIDsFromSteamIDsRequest();
 
-                convertReqObj.SteamStringIDs.AddRange(await SelectedInputProvider.ImportData(InputFile));
+                var pluginData = await SelectedInputProvider.ImportData(InputFile);
+                if(pluginData == null)
+                {
+                    MessageBox.Show($"{SelectedInputProvider.ProviderName} returned NULL!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    IsReady = true;
+                    return;
+                }
+
+                convertReqObj.SteamStringIDs.AddRange(pluginData);
 
                 var convertResponse = await PlayFabApiHelper.GetPlayFabIDsFromSteamIDs(loginResult.Data.SessionTicket, "12D56", convertReqObj);
 
