@@ -116,12 +116,13 @@ namespace MordhauTools.ViewModels
 
             var plugins = Directory.GetFiles(pluginPath, "*.dll", SearchOption.AllDirectories);
 
-            // Register providers inside the main executable
-            RegisterConversionProviders(Assembly.GetExecutingAssembly());
-
+            
             // Load plugins and register their providers
             InputProviders.Clear();
             OutputProviders.Clear();
+
+            // Register providers inside the main executable
+            RegisterConversionProviders(Assembly.GetExecutingAssembly());
 
             foreach (var plugin in plugins)
             {
