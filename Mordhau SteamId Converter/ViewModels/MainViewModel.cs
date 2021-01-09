@@ -195,7 +195,7 @@ namespace MordhauTools.ViewModels
             {
                 TitleId = "12D56",
                 CustomId = $"SteamPlayFabConverter",
-                CreateAccount = true
+                CreateAccount = false
             };
 
             var loginResponse = await PlayFabApiHelper.LoginWithCustomID(loginReqObj);
