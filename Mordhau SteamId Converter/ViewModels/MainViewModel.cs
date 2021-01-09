@@ -104,7 +104,7 @@ namespace MordhauTools.ViewModels
             var loginReqObj = new LoginWithCustomIDRequest
             {
                 TitleId = "12D56",
-                CustomId = $"Steam;127.0.0.1:{Environment.TickCount}",
+                CustomId = $"SteamPlayFabConverter",
                 CreateAccount = true
             };
 
