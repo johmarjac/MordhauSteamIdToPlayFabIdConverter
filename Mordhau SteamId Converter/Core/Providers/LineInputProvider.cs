@@ -12,6 +12,9 @@ namespace MordhauTools.Core.Providers
 
         public Task<string[]> ImportData(string inputFile)
         {
+            if (!File.Exists(inputFile))
+                return null;
+
             return File.ReadAllLinesAsync(inputFile);
         }
     }
