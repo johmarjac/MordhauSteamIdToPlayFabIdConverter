@@ -120,6 +120,9 @@ namespace MordhauTools.ViewModels
             RegisterConversionProviders(Assembly.GetExecutingAssembly());
 
             // Load plugins and register their providers
+            InputProviders.Clear();
+            OutputProviders.Clear();
+
             foreach (var plugin in plugins)
             {
                 RegisterConversionProviders(PluginLoadContext.LoadFromAssemblyPath(plugin));
@@ -128,9 +131,6 @@ namespace MordhauTools.ViewModels
 
         private void RegisterConversionProviders(Assembly assembly)
         {
-            InputProviders.Clear();
-            OutputProviders.Clear();
-
             foreach (var type in assembly.GetTypes())
             {
                 if (type.IsInterface)
