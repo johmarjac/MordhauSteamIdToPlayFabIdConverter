@@ -21,6 +21,10 @@ To do so, create a .NET Core Class-Library Project and reference the MordhauTool
 An InputProvider Class inherits from the `IInputConversionProvider` interface.
 An OutputProvider Class inherits from the `IOutputConversionProvider` interface.
 
+### Installing Providers
+All plugins go into the `Plugins` directory in the root folder of the Main Application.
+The `Plugins` directory is being created automatically upon first start of the Main Application.
+
 ## How to use
 Depending on the selected Input- and Output Provider, you simply select the Input File (containing your SteamIds)
 and your Output File where to save the result to. However this depends on the Plugin you use. The tool was initially
