@@ -14,7 +14,7 @@ namespace MordhauTools.Core.Providers
         public async Task ExportData(string filename, IEnumerable<SteamPlayFabIdPair> conversionResult)
         {
             var encodedJson = JsonConvert.SerializeObject(conversionResult, Formatting.Indented);
-            await File.WriteAllTextAsync(encodedJson, encodedJson);
+            await File.WriteAllTextAsync(filename, encodedJson);
         }
     }
 }
