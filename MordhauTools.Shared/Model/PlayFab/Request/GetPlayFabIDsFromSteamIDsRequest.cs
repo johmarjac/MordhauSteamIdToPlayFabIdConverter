@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MordhauTools.Model.PlayFab.Request
+namespace MordhauTools.Shared.Model.PlayFab.Request
 {
     public class GetPlayFabIDsFromSteamIDsRequest : PlayFabRequest
     {

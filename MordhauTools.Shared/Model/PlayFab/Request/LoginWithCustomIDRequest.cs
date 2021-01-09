@@ -1,4 +1,4 @@
-﻿namespace MordhauTools.Model.PlayFab.Request
+﻿namespace MordhauTools.Shared.Model.PlayFab.Request
 {
     public sealed class LoginWithCustomIDRequest : PlayFabTitleRequest
     {

@@ -1,12 +1,12 @@
-﻿using MordhauTools.Model.PlayFab.Request;
-using MordhauTools.Model.PlayFab.Response;
+﻿using MordhauTools.Shared.Model.PlayFab.Request;
+using MordhauTools.Shared.Model.PlayFab.Response;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MordhauTools
+namespace MordhauTools.Core
 {
     public static class PlayFabApiHelper
     {

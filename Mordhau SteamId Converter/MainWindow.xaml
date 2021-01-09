@@ -21,6 +21,8 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -30,13 +32,19 @@
         </Grid.ColumnDefinitions>
         
         <Label Grid.Row="0" Grid.Column="0" Content="Input File" />
-        <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="{Binding IsReady}" Text="{Binding InputFile}" Margin="5" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="{Binding IsReady}" Text="{Binding InputFile}" Margin="5" HorizontalContentAlignment="Center" />
         <Button Grid.Row="0" Grid.Column="2"  IsEnabled="{Binding IsReady}" Command="{Binding BrowseInput}" Content="Browse" Margin="5" />
 
         <Label Grid.Row="1" Grid.Column="0" Content="Output File" />
-        <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding IsReady}" Text="{Binding OutputFile}" Margin="5" />
+        <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding IsReady}" Text="{Binding OutputFile}" Margin="5" HorizontalContentAlignment="Center" />
         <Button Grid.Row="1" Grid.Column="2" IsEnabled="{Binding IsReady}" Command="{Binding BrowseOutput}" Content="Browse" Margin="5" />
 
-        <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding IsReady}" Command="{Binding StartConversion}" Content="Start Conversion" Margin="5" />
+        <Label Grid.Row="2" Grid.Column="0" Content="Input Provider" />
+        <ComboBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding IsReady}" SelectedItem="{Binding SelectedInputProvider}" ItemsSource="{Binding InputProviders}" DisplayMemberPath="ProviderName" Margin="5" HorizontalContentAlignment="Center" />
+
+        <Label Grid.Row="3" Grid.Column="0" Content="Output Provider" />
+        <ComboBox Grid.Row="3" Grid.Column="1" IsEnabled="{Binding IsReady}" SelectedItem="{Binding SelectedOutputProvider}" ItemsSource="{Binding OutputProviders}" DisplayMemberPath="ProviderName" Margin="5" HorizontalContentAlignment="Center" />
+
+        <Button Grid.Row="4" Grid.Column="1" IsEnabled="{Binding IsReady}" Command="{Binding StartConversion}" Content="Start Conversion" Margin="5" />
     </Grid>
 </Window>

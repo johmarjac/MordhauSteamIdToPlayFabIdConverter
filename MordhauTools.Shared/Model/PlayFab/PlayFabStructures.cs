@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MordhauTools.Model.PlayFab
+namespace MordhauTools.Shared.Model.PlayFab
 {
     public class LoginResult
     {

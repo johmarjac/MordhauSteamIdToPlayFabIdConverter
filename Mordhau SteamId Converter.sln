@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mordhau SteamId Converter", "Mordhau SteamId Converter\Mordhau SteamId Converter.csproj", "{430234E5-1305-4BEF-9295-C457A16BAD77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mordhau SteamId Converter", "Mordhau SteamId Converter\Mordhau SteamId Converter.csproj", "{430234E5-1305-4BEF-9295-C457A16BAD77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MordhauTools.Shared", "MordhauTools.Shared\MordhauTools.Shared.csproj", "{8A42661A-8082-44F1-AACB-8E9F9E1BBFC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{430234E5-1305-4BEF-9295-C457A16BAD77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{430234E5-1305-4BEF-9295-C457A16BAD77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{430234E5-1305-4BEF-9295-C457A16BAD77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A42661A-8082-44F1-AACB-8E9F9E1BBFC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A42661A-8082-44F1-AACB-8E9F9E1BBFC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A42661A-8082-44F1-AACB-8E9F9E1BBFC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A42661A-8082-44F1-AACB-8E9F9E1BBFC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,14 @@
 ﻿using Microsoft.Win32;
 using MordhauTools.Command;
-using MordhauTools.Model.PlayFab.Request;
-using MordhauTools.Model.PlayFab.Response;
-using Newtonsoft.Json;
+using MordhauTools.Core;
+using MordhauTools.Shared.Interfaces;
+using MordhauTools.Shared.Model.PlayFab.Request;
+using MordhauTools.Shared.Model.PlayFab.Response;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -58,18 +61,97 @@ namespace MordhauTools.ViewModels
             }
         }
 
+        private IInputConversionProvider selectedInputProvider;
+        public IInputConversionProvider SelectedInputProvider
+        {
+            get => selectedInputProvider;
+            set
+            {
+                selectedInputProvider = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private IOutputConversionProvider selectedOutputProvider;
+        public IOutputConversionProvider SelectedOutputProvider
+        {
+            get => selectedOutputProvider;
+            set
+            {
+                selectedOutputProvider = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IInputConversionProvider> InputProviders { get; }
+
+        public ObservableCollection<IOutputConversionProvider> OutputProviders { get; }
+
         public ICommand BrowseInput { get; }
 
         public ICommand BrowseOutput { get; }
 
         public ICommand StartConversion { get; }
 
+        private PluginLoadContext PluginLoadContext { get; }
+
         public MainViewModel()
         {
+            PluginLoadContext = new PluginLoadContext();
             IsReady = true;
+            InputProviders = new ObservableCollection<IInputConversionProvider>();
+            OutputProviders = new ObservableCollection<IOutputConversionProvider>();
             BrowseInput = new RelayCommand(BrowseInput_Click);
             BrowseOutput = new RelayCommand(BrowseOutput_Click);
             StartConversion = new RelayCommand(StartConversion_Click);
+
+            LoadPlugins();
+        }
+
+        private void LoadPlugins()
+        {
+            var pluginPath = Path.Combine(Environment.CurrentDirectory, "Plugins");
+            if (!Directory.Exists(pluginPath))
+                Directory.CreateDirectory(pluginPath);
+
+            var plugins = Directory.GetFiles(pluginPath, "*.dll", SearchOption.AllDirectories);
+
+            // Register providers inside the main executable
+            RegisterConversionProviders(Assembly.GetExecutingAssembly());
+
+            // Load plugins and register their providers
+            foreach (var plugin in plugins)
+            {
+                RegisterConversionProviders(PluginLoadContext.LoadFromAssemblyPath(plugin));
+            }
+        }
+
+        private void RegisterConversionProviders(Assembly assembly)
+        {
+            InputProviders.Clear();
+            OutputProviders.Clear();
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsInterface)
+                    continue;
+
+                if (typeof(IInputConversionProvider).IsAssignableFrom(type))
+                {
+                    IInputConversionProvider inputProvider = Activator.CreateInstance(type) as IInputConversionProvider;
+
+                    if (inputProvider != null)
+                        InputProviders.Add(inputProvider);
+                }
+
+                if (typeof(IOutputConversionProvider).IsAssignableFrom(type))
+                {
+                    IOutputConversionProvider outputProvider = Activator.CreateInstance(type) as IOutputConversionProvider;
+
+                    if (outputProvider != null)
+                        OutputProviders.Add(outputProvider);
+                }
+            }
         }
 
         private void BrowseInput_Click()
@@ -77,7 +159,7 @@ namespace MordhauTools.ViewModels
             var ofd = new OpenFileDialog();
 
             ofd.Multiselect = false;
-            ofd.Filter = "Text File|*.txt";
+            ofd.Filter = "All Files|*.*";
 
             if (ofd.ShowDialog().Value)
             {
@@ -89,7 +171,7 @@ namespace MordhauTools.ViewModels
         {
             var sfd = new SaveFileDialog();
 
-            sfd.Filter = "Json File|*.json";
+            sfd.Filter = "All Files|*.*";
 
             if (sfd.ShowDialog().Value)
             {
@@ -101,6 +183,13 @@ namespace MordhauTools.ViewModels
         {
             IsReady = false;
 
+            if (SelectedInputProvider == null || SelectedOutputProvider == null)
+            {
+                MessageBox.Show("You need to select Input- and Output Provider first.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                IsReady = true;
+                return;
+            }
+
             var loginReqObj = new LoginWithCustomIDRequest
             {
                 TitleId = "12D56",
@@ -110,24 +199,17 @@ namespace MordhauTools.ViewModels
 
             var loginResponse = await PlayFabApiHelper.LoginWithCustomID(loginReqObj);
 
-            if(loginResponse is ApiErrorWrapper loginErrorResult)
+            if (loginResponse is ApiErrorWrapper loginErrorResult)
             {
                 MessageBox.Show($"Login failed with the following error: {loginErrorResult.ErrorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 IsReady = true;
             }
 
-            if(loginResponse is LoginWithCustomIDResponse loginResult)
+            if (loginResponse is LoginWithCustomIDResponse loginResult)
             {
                 var convertReqObj = new GetPlayFabIDsFromSteamIDsRequest();
 
-                // Fill with data
-                foreach (var line in await File.ReadAllLinesAsync(InputFile))
-                {
-                    if (string.IsNullOrWhiteSpace(line))
-                        continue;
-
-                    convertReqObj.SteamStringIDs.Add(line.Trim());
-                }
+                convertReqObj.SteamStringIDs.AddRange(await SelectedInputProvider.ImportData(InputFile));
 
                 var convertResponse = await PlayFabApiHelper.GetPlayFabIDsFromSteamIDs(loginResult.Data.SessionTicket, "12D56", convertReqObj);
 
@@ -137,10 +219,9 @@ namespace MordhauTools.ViewModels
                     IsReady = true;
                 }
 
-                if(convertResponse is GetPlayFabIDsFromSteamIDsResponse convertResult)
+                if (convertResponse is GetPlayFabIDsFromSteamIDsResponse convertResult)
                 {
-                    var encodedJson = JsonConvert.SerializeObject(convertResult.SteamPlayFabPairs.Data, Formatting.Indented);
-                    File.WriteAllText(OutputFile, encodedJson);
+                    await SelectedOutputProvider.ExportData(OutputFile, convertResult.SteamPlayFabPairs.Data);
 
                     MessageBox.Show($"Conversion for {convertResult.SteamPlayFabPairs.Data.Count} Steam IDs was successful.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     IsReady = true;

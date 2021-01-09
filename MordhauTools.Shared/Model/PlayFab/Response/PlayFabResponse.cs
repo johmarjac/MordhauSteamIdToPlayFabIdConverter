@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MordhauTools.Model.PlayFab.Response
+namespace MordhauTools.Shared.Model.PlayFab.Response
 {
     public abstract class PlayFabResponse
     {
